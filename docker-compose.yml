@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  web:
+    image: mohamedelnhas018/elnhas_nginx_task:v1.0
+    container_name: nginx_server
+    ports:
+      - "5000:8080"
+    depends_on:
+      - db
+    networks:
+      - app_network
+    deploy:
+      resources:
+        limits:
+          memory: 512m  # Limit memory usage to 512MB
+          cpus: "1.0"   # Limit to 1 CPU core
+
+  db:
+    image: bitnami/postgresql:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: elnhas
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: appdb
+    volumes:
+      - elnhas_data:/var/lib/postgresql/data  # Persist database data
+    networks:
+      - app_network
+
+volumes:
+  elnhas_data:  # Named volume for database persistence
+
+networks:
+  app_network:
+
